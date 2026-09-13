@@ -328,7 +328,7 @@ module picorv32 #(
 		// OR together the handshake of every enabled co-processor
 		pcpi_int_wait  = ENABLE_PCPI && pcpi_wait;
 		pcpi_int_wait  = pcpi_int_wait  || ((ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_wait);
-		pcpi_int_wait  = pcpi_int_wait  || (ENABLE_DIV && pcpi_div_ready);
+		pcpi_int_wait  = pcpi_int_wait  || (ENABLE_DIV && pcpi_div_wait);
 		pcpi_int_ready = ENABLE_PCPI && pcpi_ready;
 		pcpi_int_ready = pcpi_int_ready || ((ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_ready);
 		pcpi_int_ready = pcpi_int_ready || (ENABLE_DIV && pcpi_div_ready);
