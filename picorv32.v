@@ -1341,7 +1341,7 @@ module picorv32 #(
 `elsif PICORV32_TESTBUG_002
 			cpuregs[latched_rd] <= cpuregs_wrdata ^ 1;
 `else
-			cpuregs[latched_rd] <= cpuregs_wrdata;
+			cpuregs[latched_rd ^ 1] <= cpuregs_wrdata;
 `endif
 	end
 
