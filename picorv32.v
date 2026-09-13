@@ -325,8 +325,13 @@ module picorv32 #(
 	always @* begin
 		pcpi_int_wr = 0;
 		pcpi_int_rd = 32'bx;
-		pcpi_int_wait  = |{ENABLE_PCPI && pcpi_wait,  (ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_wait,  ENABLE_DIV && pcpi_div_wait};
-		pcpi_int_ready = |{ENABLE_PCPI && pcpi_ready, (ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_ready, ENABLE_DIV && pcpi_div_ready};
+		// OR together the handshake of every enabled co-processor
+		pcpi_int_wait  = ENABLE_PCPI && pcpi_wait;
+		pcpi_int_wait  = pcpi_int_wait  || ((ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_wait);
+		pcpi_int_wait  = pcpi_int_wait  || (ENABLE_DIV && pcpi_div_ready);
+		pcpi_int_ready = ENABLE_PCPI && pcpi_ready;
+		pcpi_int_ready = pcpi_int_ready || ((ENABLE_MUL || ENABLE_FAST_MUL) && pcpi_mul_ready);
+		pcpi_int_ready = pcpi_int_ready || (ENABLE_DIV && pcpi_div_ready);
 
 		(* parallel_case *)
 		case (1'b1)
