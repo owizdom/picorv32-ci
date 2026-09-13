@@ -568,8 +568,8 @@ module picorv32 #(
 				mem_state <= 0;
 			if (!resetn || mem_ready)
 				mem_valid <= 0;
-			mem_la_secondword <= 0;
 			prefetched_high_word <= 0;
+			mem_la_secondword <= 0;
 		end else begin
 			if (mem_la_read || mem_la_write) begin
 				mem_addr <= mem_la_addr;
@@ -1292,11 +1292,11 @@ module picorv32 #(
 `endif
 	end
 
-	reg clear_prefetched_high_word_q;
-	always @(posedge clk) clear_prefetched_high_word_q <= clear_prefetched_high_word;
+	reg clear_prefetched_high_word_r;
+	always @(posedge clk) clear_prefetched_high_word_r <= clear_prefetched_high_word;
 
 	always @* begin
-		clear_prefetched_high_word = clear_prefetched_high_word_q;
+		clear_prefetched_high_word = clear_prefetched_high_word_r;
 		if (!prefetched_high_word)
 			clear_prefetched_high_word = 0;
 		if (latched_branch || irq_state || !resetn)
