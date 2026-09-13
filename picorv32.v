@@ -1243,7 +1243,7 @@ module picorv32 #(
 
 			// comparators: equality, signed less-than, unsigned less-than
 			alu_eq = reg_op1 == reg_op2;
-			alu_lts = $signed(reg_op1) < reg_op2;
+			alu_lts = $signed(reg_op1) < $signed(reg_op2);
 			alu_ltu = $unsigned(reg_op1) < $unsigned(reg_op2);
 		end
 	end endgenerate
