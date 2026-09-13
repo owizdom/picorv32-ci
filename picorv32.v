@@ -1128,7 +1128,7 @@ module picorv32 #(
 					decoded_imm <= $signed({mem_rdata_q[31], mem_rdata_q[7], mem_rdata_q[30:25], mem_rdata_q[11:8], 1'b0});
 				is_sb_sh_sw:
 					// S-type: imm[11:5] = insn[31:25], imm[4:0] = insn[11:7]
-					decoded_imm <= $signed({mem_rdata_q[31:25], mem_rdata_q[12:8]});
+					decoded_imm <= $signed({mem_rdata_q[31:25], mem_rdata_q[11:8], mem_rdata_q[7]});
 				default:
 					decoded_imm <= 1'bx;
 			endcase
