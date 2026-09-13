@@ -408,7 +408,7 @@ module picorv32 #(
 			end
 			1: begin
 				mem_la_wdata = {2{reg_op2[15:0]}};
-				mem_la_wstrb = reg_op1[0] ? 4'b1100 : 4'b0011;
+				mem_la_wstrb = reg_op1[1] ? 4'b1100 : 4'b0011;
 				case (reg_op1[1])
 					1'b0: mem_rdata_word = {16'b0, mem_rdata[15: 0]};
 					1'b1: mem_rdata_word = {16'b0, mem_rdata[31:16]};
