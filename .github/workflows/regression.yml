@@ -1,0 +1,25 @@
+name: regression
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends gcc-riscv64-unknown-elf iverilog
+      - run: make firmware/firmware.hex
+      - shell: bash
+        run: |
+          make test | tee regression.log
+          grep -q "ALL TESTS PASSED." regression.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: regression
+          path: |
+            regression.log
+            firmware/firmware.hex
+            firmware/firmware.elf
