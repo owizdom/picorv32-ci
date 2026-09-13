@@ -1238,11 +1238,13 @@ module picorv32 #(
 	end else begin
 		always @* begin
 			alu_add_sub = instr_sub ? reg_op1 - reg_op2 : reg_op1 + reg_op2;
-			alu_eq = reg_op1 == reg_op2;
-			alu_lts = $signed(reg_op1) < $signed(reg_op2);
-			alu_ltu = reg_op1 < reg_op2;
 			alu_shl = reg_op1 << reg_op2[4:0];
 			alu_shr = $signed({instr_sra || instr_srai ? reg_op1[31] : 1'b0, reg_op1}) >>> reg_op2[4:0];
+
+			// comparators: equality, signed less-than, unsigned less-than
+			alu_eq = reg_op1 == reg_op2;
+			alu_lts = $signed(reg_op1) < reg_op2;
+			alu_ltu = $unsigned(reg_op1) < $unsigned(reg_op2);
 		end
 	end endgenerate
 
