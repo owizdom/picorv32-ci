@@ -1127,7 +1127,8 @@ module picorv32 #(
 				is_beq_bne_blt_bge_bltu_bgeu:
 					decoded_imm <= $signed({mem_rdata_q[31], mem_rdata_q[7], mem_rdata_q[30:25], mem_rdata_q[11:8], 1'b0});
 				is_sb_sh_sw:
-					decoded_imm <= $signed({mem_rdata_q[31:25], mem_rdata_q[11:7]});
+					// S-type: imm[11:5] = insn[31:25], imm[4:0] = insn[11:7]
+					decoded_imm <= $signed({mem_rdata_q[31:25], mem_rdata_q[11:8], mem_rdata_q[7]});
 				default:
 					decoded_imm <= 1'bx;
 			endcase
@@ -1212,7 +1213,7 @@ module picorv32 #(
 	reg [31:0] current_pc;
 	assign next_pc = latched_store && latched_branch ? reg_out & ~1 : reg_next_pc;
 
-	reg [3:0] pcpi_timeout_counter;
+	reg [3:0] pcpi_timeout_cnt;
 	reg pcpi_timeout;
 
 	reg [31:0] next_irq_pending;
@@ -1424,11 +1425,11 @@ module picorv32 #(
 
 		if (WITH_PCPI && CATCH_ILLINSN) begin
 			if (resetn && pcpi_valid && !pcpi_int_wait) begin
-				if (pcpi_timeout_counter)
-					pcpi_timeout_counter <= pcpi_timeout_counter - 1;
+				if (pcpi_timeout_cnt)
+					pcpi_timeout_cnt <= pcpi_timeout_cnt - 1;
 			end else
-				pcpi_timeout_counter <= ~0;
-			pcpi_timeout <= !pcpi_timeout_counter;
+				pcpi_timeout_cnt <= ~0;
+			pcpi_timeout <= !pcpi_timeout_cnt;
 		end
 
 		if (ENABLE_COUNTERS) begin
